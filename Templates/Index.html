@@ -56,8 +56,52 @@
     <input type="url" id="statusURL" name="statusURL" placeholder="e.g. https://example.com/print-job-status">
     <br><br>
 
-    <input type="submit" value="Submit">
+    <div class="submit-container">
+        <input type="submit" value="Submit">
+        <div id="statusMessage"></div>
+    </div>
+
 </form>
+
+<script>
+    document.querySelector('form').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const formData = new FormData(this);
+
+        fetch('/submit', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === "success") {
+                showStatusMessage(data.message);
+            } else {
+                showStatusMessage(data.error);
+            }
+        })
+        .catch(error => {
+            showStatusMessage("An error occurred. Please try again.");
+        });
+    });
+
+    function showStatusMessage(message) {
+        // Get the statusMessage element
+        const statusMessageElement = document.getElementById('statusMessage');
+
+        // Set the message
+        statusMessageElement.innerText = message;
+
+        // Show the message (in case it's hidden)
+        statusMessageElement.style.display = 'block';
+
+        // Hide the message after 5 seconds
+        setTimeout(() => {
+            statusMessageElement.style.display = 'none';
+        }, 5000);
+    }
+</script>
 
 </body>
 </html>

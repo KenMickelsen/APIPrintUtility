@@ -59,18 +59,19 @@ def submit_job():
     # Send POST request to the Vasion API
     response = requests.post(api_url, data=data, files=files, verify=False)
 
+    app.logger.debug("API response content: %s", response.text)
+
     # Handle the response based on status codes
-    if 200 <= response.status_code < 300:
-        try:
-            return jsonify(response.json())
-        except ValueError:
-            return jsonify({"error": "Invalid JSON received from API"}), 500
+    # Handle the response based on status codes
+    if response.status_code == 200 or response.status_code == 202:
+        return jsonify({"status": "success", "message": "Print job submitted successfully."})
     elif 400 <= response.status_code < 500:
         return jsonify({"error": "Client error. Please check your request."}), response.status_code
     elif 500 <= response.status_code < 600:
         return jsonify({"error": "Server error. Please try again later."}), response.status_code
     else:
         return jsonify({"error": "Unexpected response: " + response.text}), response.status_code
+
 
 
 if __name__ == '__main__':

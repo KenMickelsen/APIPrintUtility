@@ -60,6 +60,18 @@ input[type="file"] {
     color: #FF5100;  /* Tertiary */
 }
 
+/* Container for the submit button and the status message */
+.submit-container {
+    display: flex;           /* Use flexbox to align items horizontally */
+    align-items: center;     /* Vertically align items in the middle */
+    gap: 10px;               /* Spacing between the button and the status message */
+}
+
+#statusMessage {
+    color: #3D2562;          /* Primary color */
+    padding: 8px;            /* Optional padding */
+}
+
 /* For small screen devices */
 @media only screen and (max-width: 600px) {
     body {

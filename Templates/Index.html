@@ -63,6 +63,22 @@
 
 </form>
 
+<h2>Print Job Status</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Timestamp</th>
+            <th>Queue</th>
+            <th>Filename</th>
+            <th>Job ID</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody id="jobStatusTable">
+        <!-- This will be populated by JavaScript -->
+    </tbody>
+</table>
+
 <script>
     document.querySelector('form').addEventListener('submit', function(event) {
         event.preventDefault();
@@ -101,6 +117,36 @@
             statusMessageElement.style.display = 'none';
         }, 5000);
     }
+
+    function updateJobStatusTable() {
+        fetch('/get-print-jobs')
+        .then(response => response.json())
+        .then(jobs => {
+            const tableBody = document.getElementById('jobStatusTable');
+            tableBody.innerHTML = "";  // Clear existing rows
+            
+            jobs.forEach(job => {
+                const row = tableBody.insertRow(0);
+                row.insertCell().textContent = job.timestamp;
+                row.insertCell().textContent = job.queue; 
+                row.insertCell().textContent = job.filename; 
+                row.insertCell().textContent = job.jobID;
+                row.insertCell().textContent = job.status;               
+            });
+        })
+        .catch(error => {
+            console.error("Error fetching print jobs:", error);
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Populate the table immediately
+        updateJobStatusTable();
+    });
+
+    // Call this function regularly to update the table
+    setInterval(updateJobStatusTable, 5000);  // Updates every 5 seconds
+
 </script>
 
 </body>

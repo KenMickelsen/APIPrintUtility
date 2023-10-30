@@ -72,6 +72,38 @@ input[type="file"] {
     padding: 8px;            /* Optional padding */
 }
 
+/* Table styles */
+table {
+    width: 100%; /* Make sure table takes the full width of its container */
+    border-collapse: collapse; /* Remove spacing between table cells */
+    background-color: #F8F8F8; /* Light gray background similar to form */
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1); /* Box shadow like the form */
+    margin-top: 20px; /* Some margin from other elements */
+    border-radius: 8px; /* Rounded corners like the form */
+}
+
+th, td {
+    padding: 10px; /* Padding inside cells */
+    border-bottom: 1px solid #CCC; /* Bottom border for cells */
+    text-align: left; /* Align text to the left */
+}
+
+th {
+    background-color: #3D2562; /* Primary color */
+    color: #FFF; /* White text on primary color */
+}
+
+/* Hover effect for table rows */
+tr:hover {
+    background-color: #E6E6E6; /* Slightly darker gray for hover */
+}
+
+/* Remove the bottom border from the last row to avoid double borders */
+tr:last-child td {
+    border-bottom: none;
+}
+
+
 /* For small screen devices */
 @media only screen and (max-width: 600px) {
     body {

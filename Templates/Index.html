@@ -1,153 +1,175 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/static/styles.css">
-    <title>Print Job Submission</title>
-</head>
-<body>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="/static/styles.css">
+        <title>Print Job Submission</title>
+    </head>
+    <body>
 
-<h2>Submit a Print Job</h2>
+        <div class="header-container">
+            <h2>Submit a Print Job</h2>
+            <a href="https://printerlogic1.mcoutput.com/1384312/1-Printerlogic/6-advanced-features/Output_Management/Configure_API_Service.htm" class="header-button">API Documentation</a>
+        </div>
+        
 
-<form action="/submit" method="post" enctype="multipart/form-data">
-    <!-- URL for Vasion API Print Service -->
-    <label for="apiUrl">API Endpoint URL:</label>
-    <input type="url" id="apiUrl" name="apiUrl" placeholder="e.g. https://localhost:31990/v1/print" required>
-    <br><br>
-    
-    <!-- File Upload -->
-    <label for="file">File:</label>
-    <input type="file" id="file" name="file" required>
-    <br><br>
-
-    <!-- Printer Queue -->
-    <label for="queue">Printer Queue:</label>
-    <input type="text" id="queue" name="queue" placeholder="e.g. HP127" required>
-    <br><br>
-
-    <!-- Number of Copies -->
-    <label for="copies">Copies:</label>
-    <input type="number" id="copies" name="copies" min="1" value="1" required>
-    <br><br>
-
-    <!-- Paper Source -->
-    <label for="paperSource">Paper Source:</label>
-    <input type="text" id="paperSource" name="paperSource" placeholder="e.g. 1">
-    <br><br>
-
-    <!-- Duplex -->
-    <label for="duplex">Duplex:</label>
-    <input type="checkbox" id="duplex" name="duplex" value="true">
-    <br><br>
-
-    <!-- Color -->
-    <label for="color">Color:</label>
-    <input type="checkbox" id="color" name="color" value="true" checked>
-    <br><br>
-
-    <!-- Username -->
-    <label for="username">Username:</label>
-    <input type="text" id="username" name="username" placeholder="e.g. jon.doe@vasion.com" required>
-    <br><br>
-
-    <!-- Status URL -->
-    <label for="statusURL">Status URL:</label>
-    <input type="url" id="statusURL" name="statusURL" placeholder="e.g. https://example.com/print-job-status">
-    <br><br>
-
-    <div class="submit-container">
-        <input type="submit" value="Submit">
-        <div id="statusMessage"></div>
-    </div>
-
-</form>
-
-<h2>Print Job Status</h2>
-<table>
-    <thead>
-        <tr>
-            <th>Timestamp</th>
-            <th>Queue</th>
-            <th>Filename</th>
-            <th>Job ID</th>
-            <th>Status</th>
-        </tr>
-    </thead>
-    <tbody id="jobStatusTable">
-        <!-- This will be populated by JavaScript -->
-    </tbody>
-</table>
-
-<script>
-    document.querySelector('form').addEventListener('submit', function(event) {
-        event.preventDefault();
-
-        const formData = new FormData(this);
-
-        fetch('/submit', {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === "success") {
-                showStatusMessage(data.message);
-            } else {
-                showStatusMessage(data.error);
-            }
-        })
-        .catch(error => {
-            showStatusMessage("An error occurred. Please try again.");
-        });
-    });
-
-    function showStatusMessage(message) {
-        // Get the statusMessage element
-        const statusMessageElement = document.getElementById('statusMessage');
-
-        // Set the message
-        statusMessageElement.innerText = message;
-
-        // Show the message (in case it's hidden)
-        statusMessageElement.style.display = 'block';
-
-        // Hide the message after 5 seconds
-        setTimeout(() => {
-            statusMessageElement.style.display = 'none';
-        }, 5000);
-    }
-
-    function updateJobStatusTable() {
-        fetch('/get-print-jobs')
-        .then(response => response.json())
-        .then(jobs => {
-            const tableBody = document.getElementById('jobStatusTable');
-            tableBody.innerHTML = "";  // Clear existing rows
+        <form action="/submit" method="post" enctype="multipart/form-data">
+            <!-- URL for Vasion API Print Service -->
+            <label for="apiUrl">API Endpoint URL:
+                <span class="tooltip" title="This is the URL of the API Print service client jobs will be sent to.">?</span>
+            </label>
+            <input type="url" id="apiUrl" name="apiUrl" placeholder="e.g. https://localhost:31990/v1/print" required>
+            <br><br>
             
-            jobs.forEach(job => {
-                const row = tableBody.insertRow(0);
-                row.insertCell().textContent = job.timestamp;
-                row.insertCell().textContent = job.queue; 
-                row.insertCell().textContent = job.filename; 
-                row.insertCell().textContent = job.jobID;
-                row.insertCell().textContent = job.status;               
+            <!-- File Upload -->
+            <label for="file">PDF File:
+                <span class="tooltip" title="Select the PDF to be printed">?</span>
+            </label>
+            <input type="file" id="file" name="file" required>
+            <br><br>
+
+            <!-- Printer Queue -->
+            <label for="queue">Printer Queue:
+                <span class="tooltip" title="This is the name of the Printer as defined inside of PrinterLogic that this job will be routed to.">?</span>
+            </label>
+            <input type="text" id="queue" name="queue" placeholder="e.g. HP127" required>
+            <br><br>
+
+            <!-- Number of Copies -->
+            <label for="copies">Copies:
+                <span class="tooltip" title="Defines how many copies of the file to print. Default is '1'">?</span>
+            </label>
+            <input type="number" id="copies" name="copies" min="1" value="1" required>
+            <br><br>
+
+            <!-- Paper Source -->
+            <label for="paperSource">Paper Source:
+                <span class="tooltip" title="Defines which tray on the printer the job should be printed to. Not required.">?</span>
+            </label>
+            <input type="text" id="paperSource" name="paperSource" placeholder="e.g. 1">
+            <br><br>
+
+            <!-- Duplex -->
+            <label for="duplex">Duplex:
+                <span class="tooltip" title="Controls if the print should print on both sides of the page or one.">?</span>
+            </label>
+            <input type="checkbox" id="duplex" name="duplex" value="true">
+            <br><br>
+
+            <!-- Color -->
+            <label for="color">Color:
+                <span class="tooltip" title="Controls if the document should print in color or monochrome.">?</span>
+            </label>
+            <input type="checkbox" id="color" name="color" value="true" checked>
+            <br><br>
+
+            <!-- Username -->
+            <label for="username">Username:
+                <span class="tooltip" title="This username will be associated with the print job in reporting and for pull or secure print release. Must match the user's identity inside PrinterLogic.">?</span>
+            </label>
+            <input type="text" id="username" name="username" placeholder="e.g. jon.doe@vasion.com" required>
+            <br><br>
+
+            <!-- Status URL -->
+            <label for="statusURL">Status URL:
+                <span class="tooltip" title="This URL will be used by the Output Management service to respond with a status update once a job is either printed, or receives an error. This is not required, however, only status on a document being received by the API Print service can be provided. The customer application must have an endpoint to receive this status update.">?</span>
+            </label>
+            <input type="url" id="statusURL" name="statusURL" placeholder="e.g. https://example.com/print-job-status">
+            <br><br>
+
+            <div class="submit-container">
+                <input type="submit" value="Submit">
+                <div id="statusMessage"></div>
+            </div>
+
+        </form>
+
+        <h2>Print Job Status</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Timestamp</th>
+                    <th>Queue</th>
+                    <th>Filename</th>
+                    <th>Job ID</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="jobStatusTable">
+                <!-- This will be populated by JavaScript -->
+            </tbody>
+        </table>
+
+        <script>
+            document.querySelector('form').addEventListener('submit', function(event) {
+                event.preventDefault();
+
+                const formData = new FormData(this);
+
+                fetch('/submit', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === "success") {
+                        showStatusMessage(data.message);
+                    } else {
+                        showStatusMessage(data.error);
+                    }
+                })
+                .catch(error => {
+                    showStatusMessage("An error occurred. Please try again.");
+                });
             });
-        })
-        .catch(error => {
-            console.error("Error fetching print jobs:", error);
-        });
-    }
 
-    document.addEventListener('DOMContentLoaded', function() {
-        // Populate the table immediately
-        updateJobStatusTable();
-    });
+            function showStatusMessage(message) {
+                // Get the statusMessage element
+                const statusMessageElement = document.getElementById('statusMessage');
 
-    // Call this function regularly to update the table
-    setInterval(updateJobStatusTable, 5000);  // Updates every 5 seconds
+                // Set the message
+                statusMessageElement.innerText = message;
 
-</script>
+                // Show the message (in case it's hidden)
+                statusMessageElement.style.display = 'block';
 
-</body>
+                // Hide the message after 5 seconds
+                setTimeout(() => {
+                    statusMessageElement.style.display = 'none';
+                }, 5000);
+            }
+
+            function updateJobStatusTable() {
+                fetch('/get-print-jobs')
+                .then(response => response.json())
+                .then(jobs => {
+                    const tableBody = document.getElementById('jobStatusTable');
+                    tableBody.innerHTML = "";  // Clear existing rows
+                    
+                    jobs.forEach(job => {
+                        const row = tableBody.insertRow(0);
+                        row.insertCell().textContent = job.timestamp;
+                        row.insertCell().textContent = job.queue; 
+                        row.insertCell().textContent = job.filename; 
+                        row.insertCell().textContent = job.jobID;
+                        row.insertCell().textContent = job.status;               
+                    });
+                })
+                .catch(error => {
+                    console.error("Error fetching print jobs:", error);
+                });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+                // Populate the table immediately
+                updateJobStatusTable();
+            });
+
+            // Call this function regularly to update the table
+            setInterval(updateJobStatusTable, 5000);  // Updates every 5 seconds
+
+        </script>
+
+    </body>
 </html>

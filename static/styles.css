@@ -103,6 +103,40 @@ tr:last-child td {
     border-bottom: none;
 }
 
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-button {
+    padding: 10px 15px;
+    background-color: #3D2562;  /* Adjust the color as needed */
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    /* Optional: Add some hover effects for better UX */
+    &:hover {
+        background-color: #7E5FDD;  /* Adjust the hover color as needed */
+    }
+}
+
+.tooltip {
+    display: inline-block;
+    margin-left: 5px;
+    width: 15px;
+    height: 15px;
+    background-color: #3D2562;
+    color: #FFF;
+    text-align: center;
+    border-radius: 50%;  /* makes it circular */
+    cursor: help;  /* changes mouse cursor to a question mark on hover */
+    line-height: 15px;  /* centers the "?" vertically */
+}
 
 /* For small screen devices */
 @media only screen and (max-width: 600px) {

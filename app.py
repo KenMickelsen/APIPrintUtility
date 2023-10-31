@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, jsonify, logging
 from requests_toolbelt.multipart.encoder import MultipartEncoder
 from logging.config import dictConfig
 from datetime import datetime
-import uuid, os, socket, requests, argparse
+import uuid, os, socket, requests, argparse, webbrowser
 
 template_dir = os.path.abspath('templates')
 static_dir = os.path.abspath('static')
@@ -142,5 +142,6 @@ def get_print_jobs():
 if __name__ == '__main__':
     args = get_args()
     port = args.port
-
+    host = get_local_ip()
+    webbrowser.open(f'http://{host}:{port}/')
     app.run(host=get_local_ip(), port=port, debug=True)

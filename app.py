@@ -143,5 +143,7 @@ if __name__ == '__main__':
     args = get_args()
     port = args.port
     host = get_local_ip()
-    webbrowser.open(f'http://{host}:{port}/')
+    if os.environ.get('WERKZEUG_RUN_MAIN') != 'true':
+        webbrowser.open(f'http://{host}:{port}/')
+    
     app.run(host=get_local_ip(), port=port, debug=True)

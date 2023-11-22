@@ -10,7 +10,7 @@
 
         <div class="header-container">
             <h2>Submit a Print Job</h2>
-            <a href="https://printerlogic1.mcoutput.com/1384312/1-Printerlogic/6-advanced-features/Output_Management/Configure_API_Service.htm" class="header-button" target="_blank" rel="noopener noreferrer">API Documentation</a>
+            <a href="https://printerlogic1.mcoutput.com/1384312/API/OM/API_Print_Service.htm" class="header-button" target="_blank" rel="noopener noreferrer">API Documentation</a>
         </div>
         
         <form action="/submit" method="post" enctype="multipart/form-data">
@@ -72,7 +72,7 @@
 
             <!-- Status URL -->
             <label for="statusURL">Status URL:
-                <span class="tooltip" title="This URL will be used by the Output Management service to respond with a status update once a job is either printed, or receives an error. This is not required, however, only status on a document being received by the API Print service can be provided. The customer application must have an endpoint to receive this status update.">?</span>
+                <span class="tooltip" title="This URL will be used by the Output Management service to respond with a status update once a job is either printed, or receives an error. This is not required, however, only status of a document being received by the API Print service can be provided without it. The customer application must have an endpoint to receive this status update.">?</span>
             </label>
             <input type="url" id="statusURL" name="statusURL" placeholder="e.g. https://example.com/print-job-status">
             <br><br>

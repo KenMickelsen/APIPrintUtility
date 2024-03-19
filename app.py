@@ -65,7 +65,7 @@ def submit_job():
     job_id = str(uuid.uuid4())
 
     # Extract data from the HTML form
-    data = {
+    data = MultipartEncoder(fields= {
         "queue": request.form.get('queue'),
         "filename": filename,
         "jobID": job_id,
@@ -75,15 +75,12 @@ def submit_job():
         "copies": int(request.form.get('copies')),
         "paperSource": request.form.get('paperSource'),
         "username": request.form.get('username'),
-        "statusURL": request.form.get('statusURL')
-    }
+        "statusURL": request.form.get('statusURL'),
+        'file': (filename, file_content)
+    })
 
     #Assign the URL defined in the form for where to send the print job requests to
     api_url = request.form.get('apiUrl')
-
-    files = {
-        'file': (filename, file_content)
-    }
 
     # Store initial job details for reporting
     new_job = {
@@ -96,7 +93,7 @@ def submit_job():
     print_jobs.append(new_job)
 
     # Send POST request to the Vasion API to submit print job
-    response = requests.post(api_url, data=data, files=files, verify=False)
+    response = requests.post(api_url, data=data, headers={'Content-Type': data.content_type}, verify=False)
 
     app.logger.debug("API response content: %s", response.text)
 
